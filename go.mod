@@ -3,7 +3,7 @@ module conjur-in-go
 go 1.14
 
 require (
-	github.com/go-gormigrate/gormigrate/v2 v2.0.0 // indirect
+	github.com/go-gormigrate/gormigrate/v2 v2.0.0
 	github.com/gorilla/handlers v1.5.1
 	github.com/gorilla/mux v1.8.0
 	github.com/mitchellh/go-homedir v1.1.0

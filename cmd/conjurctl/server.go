@@ -6,21 +6,23 @@ import (
 	"log"
 	"os"
 
+	"github.com/go-gormigrate/gormigrate/v2"
 	"github.com/spf13/cobra"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 
+	"conjur-in-go/pkg/model/migrations"
 	"conjur-in-go/pkg/server"
 	"conjur-in-go/pkg/server/endpoints"
 	"conjur-in-go/pkg/slosilo/store"
 )
-
 
 // NOTES
 // tokenSigningPrivateKey is stored in slosilo keystore
 
 const defaultBindAddress = "127.0.0.1"
 const defaultPort = "8000"
+const defaultMigrateDB = false
 
 // serverCmd represents the server command
 var serverCmd = &cobra.Command{
@@ -49,12 +51,16 @@ To run the server requires the environment variables CONJUR_DATA_KEY and DATABAS
 					PreferSimpleProtocol: true, // disables implicit prepared statement usage
 				},
 			),
-			&gorm.Config{
-			},
+			&gorm.Config{},
 		)
 		if err != nil {
 			fmt.Println("Unable to connect to DB:", err)
 			os.Exit(1)
+		}
+
+		migrateDB, _ := cmd.Flags().GetBool("migrate-database")
+		if migrateDB {
+			doDatabaseMigrations(db)
 		}
 
 		keystore, err := store.NewKeyStore(db, dataKey)
@@ -88,4 +94,13 @@ func init() {
 	// is called directly, e.g.:
 	serverCmd.Flags().StringP("port", "p", defaultPort, "server listen port")
 	serverCmd.Flags().StringP("bind-address", "b", defaultBindAddress, "server bind address")
+	serverCmd.Flags().BoolP("migrate-database", "m", defaultMigrateDB, "perform db schema migration on start")
+}
+
+func doDatabaseMigrations(db *gorm.DB) {
+	m := gormigrate.New(db, &gormigrate.Options{UseTransaction: true}, migrations.GetFileMigrations())
+	if err := m.Migrate(); err != nil {
+		log.Fatalf("Could not migrate: %v", err)
+	}
+	log.Printf("Successfully performed migrations\n")
 }
