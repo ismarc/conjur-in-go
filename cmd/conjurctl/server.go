@@ -98,7 +98,7 @@ func init() {
 }
 
 func doDatabaseMigrations(db *gorm.DB) {
-	m := gormigrate.New(db, &gormigrate.Options{UseTransaction: true}, migrations.GetFileMigrations())
+	m := gormigrate.New(db, &gormigrate.Options{UseTransaction: true}, migrations.GetMigrations())
 	if err := m.Migrate(); err != nil {
 		log.Fatalf("Could not migrate: %v", err)
 	}
