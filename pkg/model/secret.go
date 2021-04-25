@@ -1,14 +1,17 @@
 package model
 
 import (
-	"database/sql"
+	"time"
 )
 
 type Secret struct {
-	ResourceId string
-	Value      sql.RawBytes
+	ResourceId string    `gorm:"primaryKey;not null"`
+	Version    int       `gorm:"primaryKey;type:integer;not null"`
+	Value      []byte    `gorm:"not null"`
+	ExpiresAt  time.Time `gorm:"type:timestamp without time zone"`
 }
 
-func (s Secret) TableName() string {
-	return "secrets"
-}
+// Unneeded for normal table name format
+// func (s Secret) TableName() string {
+// 	return "secrets"
+// }

@@ -89,33 +89,33 @@ ALTER TYPE public.role_graph_edge OWNER TO postgres;
 -- Name: account(text); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
-CREATE FUNCTION public.account(id text) RETURNS text
-    LANGUAGE sql IMMUTABLE
-    AS $_$
-    SELECT CASE 
-       WHEN split_part($1, ':', 1) = '' THEN NULL 
-      ELSE split_part($1, ':', 1)
-    END
-    $_$;
+-- CREATE FUNCTION public.account(id text) RETURNS text
+--     LANGUAGE sql IMMUTABLE
+--     AS $_$
+--     SELECT CASE 
+--        WHEN split_part($1, ':', 1) = '' THEN NULL 
+--       ELSE split_part($1, ':', 1)
+--     END
+--     $_$;
 
 
-ALTER FUNCTION public.account(id text) OWNER TO postgres;
+-- ALTER FUNCTION public.account(id text) OWNER TO postgres;
 
 --
 -- Name: kind(text); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
-CREATE FUNCTION public.kind(id text) RETURNS text
-    LANGUAGE sql IMMUTABLE
-    AS $_$
-    SELECT CASE 
-       WHEN split_part($1, ':', 2) = '' THEN NULL 
-      ELSE split_part($1, ':', 2)
-    END
-    $_$;
+-- CREATE FUNCTION public.kind(id text) RETURNS text
+--     LANGUAGE sql IMMUTABLE
+--     AS $_$
+--     SELECT CASE 
+--        WHEN split_part($1, ':', 2) = '' THEN NULL 
+--       ELSE split_part($1, ':', 2)
+--     END
+--     $_$;
 
 
-ALTER FUNCTION public.kind(id text) OWNER TO postgres;
+-- ALTER FUNCTION public.kind(id text) OWNER TO postgres;
 
 SET default_tablespace = '';
 
@@ -125,15 +125,15 @@ SET default_table_access_method = heap;
 -- Name: resources; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.resources (
-    resource_id text NOT NULL,
-    owner_id text NOT NULL,
-    created_at timestamp without time zone DEFAULT transaction_timestamp() NOT NULL,
-    policy_id text,
-    CONSTRAINT has_account CHECK ((public.account(resource_id) IS NOT NULL)),
-    CONSTRAINT has_kind CHECK ((public.kind(resource_id) IS NOT NULL)),
-    CONSTRAINT verify_policy_kind CHECK ((public.kind(policy_id) = 'policy'::text))
-);
+-- CREATE TABLE public.resources (
+--     resource_id text NOT NULL,
+--     owner_id text NOT NULL,
+--     created_at timestamp without time zone DEFAULT transaction_timestamp() NOT NULL,
+--     policy_id text,
+--     CONSTRAINT has_account CHECK ((public.account(resource_id) IS NOT NULL)),
+--     CONSTRAINT has_kind CHECK ((public.kind(resource_id) IS NOT NULL)),
+--     CONSTRAINT verify_policy_kind CHECK ((public.kind(policy_id) = 'policy'::text))
+-- );
 
 
 ALTER TABLE public.resources OWNER TO postgres;
@@ -155,14 +155,14 @@ ALTER FUNCTION public.account(record public.resources) OWNER TO postgres;
 -- Name: roles; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.roles (
-    role_id text NOT NULL,
-    created_at timestamp without time zone DEFAULT transaction_timestamp() NOT NULL,
-    policy_id text,
-    CONSTRAINT has_account CHECK ((public.account(role_id) IS NOT NULL)),
-    CONSTRAINT has_kind CHECK ((public.kind(role_id) IS NOT NULL)),
-    CONSTRAINT verify_policy_kind CHECK ((public.kind(policy_id) = 'policy'::text))
-);
+-- CREATE TABLE public.roles (
+--     role_id text NOT NULL,
+--     created_at timestamp without time zone DEFAULT transaction_timestamp() NOT NULL,
+--     policy_id text,
+--     CONSTRAINT has_account CHECK ((public.account(role_id) IS NOT NULL)),
+--     CONSTRAINT has_kind CHECK ((public.kind(role_id) IS NOT NULL)),
+--     CONSTRAINT verify_policy_kind CHECK ((public.kind(policy_id) = 'policy'::text))
+-- );
 
 
 ALTER TABLE public.roles OWNER TO postgres;
@@ -245,17 +245,17 @@ ALTER FUNCTION public.annotation_update_textsearch() OWNER TO postgres;
 -- Name: policy_versions; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.policy_versions (
-    resource_id text NOT NULL,
-    role_id text NOT NULL,
-    version integer NOT NULL,
-    created_at timestamp with time zone DEFAULT transaction_timestamp() NOT NULL,
-    policy_text text NOT NULL,
-    policy_sha256 text NOT NULL,
-    finished_at timestamp with time zone,
-    client_ip text,
-    CONSTRAINT created_before_finish CHECK ((created_at <= finished_at))
-);
+-- CREATE TABLE public.policy_versions (
+--     resource_id text NOT NULL,
+--     role_id text NOT NULL,
+--     version integer NOT NULL,
+--     created_at timestamp with time zone DEFAULT transaction_timestamp() NOT NULL,
+--     policy_text text NOT NULL,
+--     policy_sha256 text NOT NULL,
+--     finished_at timestamp with time zone,
+--     client_ip text,
+--     CONSTRAINT created_before_finish CHECK ((created_at <= finished_at))
+-- );
 
 
 ALTER TABLE public.policy_versions OWNER TO postgres;
@@ -1035,13 +1035,13 @@ ALTER FUNCTION public.visible_resources(role_id text) OWNER TO postgres;
 -- Name: annotations; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.annotations (
-    resource_id text NOT NULL,
-    name text NOT NULL,
-    value text NOT NULL,
-    policy_id text,
-    CONSTRAINT verify_policy_kind CHECK ((public.kind(policy_id) = 'policy'::text))
-);
+-- CREATE TABLE public.annotations (
+--     resource_id text NOT NULL,
+--     name text NOT NULL,
+--     value text NOT NULL,
+--     policy_id text,
+--     CONSTRAINT verify_policy_kind CHECK ((public.kind(policy_id) = 'policy'::text))
+-- );
 
 
 ALTER TABLE public.annotations OWNER TO postgres;
@@ -1050,11 +1050,11 @@ ALTER TABLE public.annotations OWNER TO postgres;
 -- Name: authenticator_configs; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.authenticator_configs (
-    id integer NOT NULL,
-    resource_id text NOT NULL,
-    enabled boolean DEFAULT false NOT NULL
-);
+-- CREATE TABLE public.authenticator_configs (
+--     id integer NOT NULL,
+--     resource_id text NOT NULL,
+--     enabled boolean DEFAULT false NOT NULL
+-- );
 
 
 ALTER TABLE public.authenticator_configs OWNER TO postgres;
@@ -1063,36 +1063,36 @@ ALTER TABLE public.authenticator_configs OWNER TO postgres;
 -- Name: authenticator_configs_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
-CREATE SEQUENCE public.authenticator_configs_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+-- CREATE SEQUENCE public.authenticator_configs_id_seq
+--     AS integer
+--     START WITH 1
+--     INCREMENT BY 1
+--     NO MINVALUE
+--     NO MAXVALUE
+--     CACHE 1;
 
 
-ALTER TABLE public.authenticator_configs_id_seq OWNER TO postgres;
+-- ALTER TABLE public.authenticator_configs_id_seq OWNER TO postgres;
 
 --
 -- Name: authenticator_configs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.authenticator_configs_id_seq OWNED BY public.authenticator_configs.id;
+-- ALTER SEQUENCE public.authenticator_configs_id_seq OWNED BY public.authenticator_configs.id;
 
 
 --
 -- Name: credentials; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.credentials (
-    role_id text NOT NULL,
-    client_id text,
-    api_key bytea,
-    encrypted_hash bytea,
-    expiration timestamp without time zone,
-    restricted_to cidr[] DEFAULT '{}'::cidr[] NOT NULL
-);
+-- CREATE TABLE public.credentials (
+--     role_id text NOT NULL,
+--     client_id text,
+--     api_key bytea,
+--     encrypted_hash bytea,
+--     expiration timestamp without time zone,
+--     restricted_to cidr[] DEFAULT '{}'::cidr[] NOT NULL
+-- );
 
 
 ALTER TABLE public.credentials OWNER TO postgres;
@@ -1186,12 +1186,12 @@ ALTER TABLE public.schema_migrations OWNER TO postgres;
 -- Name: secrets; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.secrets (
-    resource_id text NOT NULL,
-    version integer NOT NULL,
-    value bytea NOT NULL,
-    expires_at timestamp without time zone
-);
+-- CREATE TABLE public.secrets (
+--     resource_id text NOT NULL,
+--     version integer NOT NULL,
+--     value bytea NOT NULL,
+--     expires_at timestamp without time zone
+-- );
 
 
 ALTER TABLE public.secrets OWNER TO postgres;
@@ -1213,39 +1213,39 @@ ALTER TABLE public.slosilo_keystore OWNER TO postgres;
 -- Name: authenticator_configs id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.authenticator_configs ALTER COLUMN id SET DEFAULT nextval('public.authenticator_configs_id_seq'::regclass);
+-- ALTER TABLE ONLY public.authenticator_configs ALTER COLUMN id SET DEFAULT nextval('public.authenticator_configs_id_seq'::regclass);
 
 
 --
 -- Name: annotations annotations_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.annotations
-    ADD CONSTRAINT annotations_pkey PRIMARY KEY (resource_id, name);
+-- ALTER TABLE ONLY public.annotations
+--     ADD CONSTRAINT annotations_pkey PRIMARY KEY (resource_id, name);
 
 
 --
 -- Name: authenticator_configs authenticator_configs_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.authenticator_configs
-    ADD CONSTRAINT authenticator_configs_pkey PRIMARY KEY (id);
+-- ALTER TABLE ONLY public.authenticator_configs
+--     ADD CONSTRAINT authenticator_configs_pkey PRIMARY KEY (id);
 
 
 --
 -- Name: authenticator_configs authenticator_configs_resource_id_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.authenticator_configs
-    ADD CONSTRAINT authenticator_configs_resource_id_key UNIQUE (resource_id);
+-- ALTER TABLE ONLY public.authenticator_configs
+--     ADD CONSTRAINT authenticator_configs_resource_id_key UNIQUE (resource_id);
 
 
 --
 -- Name: credentials credentials_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.credentials
-    ADD CONSTRAINT credentials_pkey PRIMARY KEY (role_id);
+-- ALTER TABLE ONLY public.credentials
+--     ADD CONSTRAINT credentials_pkey PRIMARY KEY (role_id);
 
 
 --
@@ -1268,16 +1268,16 @@ ALTER TABLE ONLY public.permissions
 -- Name: policy_versions policy_versions_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.policy_versions
-    ADD CONSTRAINT policy_versions_pkey PRIMARY KEY (resource_id, version);
+-- ALTER TABLE ONLY public.policy_versions
+--     ADD CONSTRAINT policy_versions_pkey PRIMARY KEY (resource_id, version);
 
 
 --
 -- Name: resources resources_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.resources
-    ADD CONSTRAINT resources_pkey PRIMARY KEY (resource_id);
+-- ALTER TABLE ONLY public.resources
+--     ADD CONSTRAINT resources_pkey PRIMARY KEY (resource_id);
 
 
 --
@@ -1300,8 +1300,8 @@ ALTER TABLE ONLY public.role_memberships
 -- Name: roles roles_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.roles
-    ADD CONSTRAINT roles_pkey PRIMARY KEY (role_id);
+-- ALTER TABLE ONLY public.roles
+--     ADD CONSTRAINT roles_pkey PRIMARY KEY (role_id);
 
 
 --
@@ -1316,8 +1316,8 @@ ALTER TABLE ONLY public.schema_migrations
 -- Name: secrets secrets_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.secrets
-    ADD CONSTRAINT secrets_pkey PRIMARY KEY (resource_id, version);
+-- ALTER TABLE ONLY public.secrets
+--     ADD CONSTRAINT secrets_pkey PRIMARY KEY (resource_id, version);
 
 
 --
